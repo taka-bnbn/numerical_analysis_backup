@@ -1,0 +1,117 @@
+Equation for curvilinear motion
+Hiroki Okubo
+1 Curvilinear motion
+We consider the kinetics of particles which move
+along plane curvilinear paths. We will make use
+of the three coordinate descriptions of acceleration
+in curvilinear motion. The choice of an appropriate
+coordinate system depends on the conditions of the
+problem.
+• Rectangular coordinates
+ΣFx = max (1)
+ΣFy = may (2)
+where ax = ¨x and ay = ¨y.
+• Normal and tangential coordinates
+ΣFn = man (3)
+ΣFt = mat (4)
+where an = ρβ˙2 = v
+2/ρ and at = ˙v. The
+positive sense of the n-axis is toward the center
+of curvature, and so the positive sense of the
+force summation ΣFn must also be toward the
+center of curvature to agree with the positive
+sense of the acceleration an = v
+2/ρ.
+• Polar coordinates
+ΣFr = mar (5)
+ΣFθ = maθ (6)
+where ar = ¨r − r
+˙θ
+2 and aθ = r
+¨θ + 2 ˙r
+˙θ.
+2 Examples
+1. Determine the maximum speed v which the
+sliding block may have as it passes point A
+without losing contact with the surface as
+shown in Fig. 1.
+A
+ρ
+Figure 1: Sliding block
+Solution. The equation of motion in the normal direction is
+mg − N = m
+v
+2
+ρ
+(7)
+where N is the reaction force from the surface.
+The force is zero, N = 0, when the block loses
+contact with the surface. Substituting N = 0
+into Eq. (7) gives
+v =
+√
+gρ (8)
+If the speed at A were less than √gρ, an upward normal force exerted by the surface on
+the block would exist. In order for the block
+to have a speed at A which is greater than
+√gρ, some type of constraint would have to
+be introduced to provide additional downward
+force.
+2. Small objects are released from rest at A and
+slide down the smooth circular surface of radius R to a conveyor B. Determine the expression for the normal contact force N between the guide and each object in terms of θ
+and specify the correct angular velocity ω of
+the conveyor pulley of radius r to prevent any
+1
+θ
+A
+B
+r
+ω
+R
+Figure 2: Sliding block
+sliding on the belt as the objects transfer to
+the conveyor.
+Solution. By using the polar-coordinate
+form, when the object on the circular surface
+the equations of motion are
+mg cos θ = mR¨θ (9)
+−N + mg sin θ = −mR ˙θ
+2
+(10)
+Integrating Eq. (9) to obtain as a function of
+θ yields
+Z θ˙
+0
+˙θd ˙θ =
+g
+R
+Z θ
+0
+cos θdθ
+˙θ
+2
+2
+=
+g
+R
+sin θ (11)
+Substituting Eq. (11) into Eq. (10) gives
+N = mg sin θ + mR ˙θ
+2
+= mg sin θ + mR 
+2g
+R
+sin θ
+
+= 3mg sin θ (12)
+The conveyor pulley must turn at the rate
+R ˙θ = rω for θ = π/2, so that
+ω =
+√
+2gR
+r
+(13)
+References
+[1] J. L. Meriam and L. G. Kraige, (2012), Engineering Mechanics, Volume 2, Dynamics, 7th
+edition, Wiley
+2

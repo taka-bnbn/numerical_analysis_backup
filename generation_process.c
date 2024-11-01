@@ -2,20 +2,29 @@
 #include <ctype.h>
 
 int main() {
-    char str[1000];
+    char buffer[1000];  // 一時的にデータを読み込むバッファ
     int count[26] = {0}; // 各アルファベットの出現回数を記録する配列
+    FILE *fp, *f;
+    int total_chars = 0; // 読み込んだ文字の総数
 
-    // ユーザー入力
-    printf("文字列を入力してください: ");
-    fgets(str, sizeof(str), stdin);
+    // "data.txt" を開いて入力を読み込み
+    f = fopen("data.txt", "r");
+    if (f == NULL) {
+        printf("data.txt を開けませんでした。\n");
+        return 1;
+    }
 
-    // 文字列内の各文字について処理
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (isalpha(str[i])) { // アルファベットかどうかチェック
-            char ch = tolower(str[i]); // 小文字に変換
-            count[ch - 'a']++; // 該当する位置にカウントを加算
+    // ファイルから複数行にわたってデータを読み込む
+    while (fgets(buffer, sizeof(buffer), f) != NULL && total_chars < 10000) {
+        for (int i = 0; buffer[i] != '\0' && total_chars < 10000; i++) {
+            if (isalpha(buffer[i])) { // アルファベットかどうかチェック
+                char ch = tolower(buffer[i]); // 小文字に変換
+                count[ch - 'a']++;
+                total_chars++;
+            }
         }
     }
+    fclose(f);
 
     // 結果を表示
     printf("アルファベットの使用頻度:\n");
@@ -23,11 +32,18 @@ int main() {
         printf("%c: %d\n", 'a' + i, count[i]);
     }
 
+    // 結果を "count.txt" に書き込み
+    fp = fopen("count.txt", "w");
+    if (fp == NULL) {
+        printf("count.txt を開けませんでした。\n");
+        return 1;
+    }
+
+    for (int i = 0; i < 26; i++) {
+        fprintf(fp, "%c: %d\n", 'a' + i, count[i]);
+    }
+
+    fclose(fp);
     return 0;
 }
-
-
-
-
-
 
