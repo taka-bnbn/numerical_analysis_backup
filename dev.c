@@ -16,7 +16,7 @@ int main() {
     }
 
 	//少し複雑だなーって思ってます 
-    while ((sizeof(kazu)/sizeof(kazu[0]))<=kaisu) {//此処がよろしくないようですねぇ	
+    while ((sizeof(kazu)/sizeof(kazu[0]))>=kaisu) {//此処がよろしくないようですねぇ	
         
     for (int i = 0; kazu[i] != '\0' && totalmojisu < 10000; i++) {
             
