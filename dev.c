@@ -14,10 +14,6 @@ int main() {
 
 
     f = fopen("data.txt", "r");
-    if (f == NULL) {
-        printf("ファイルを開けませんでした。\n");
-        return 1;
-    }
 
     
     while (fgets(kazu, sizeof(kazu), f) != NULL && total_chars < 10000) {
@@ -51,10 +47,6 @@ int main() {
 
 
     fp = fopen("count.txt", "w");
-    if (fp == NULL) {
-        printf("ファイルを開けませんでした。\n");
-        return 1;
-    }
 
     for (int i = 0; i < 26; i++) {
         fprintf(fp, "%c: %d\n", frequencies[i].letter, frequencies[i].frequency);
