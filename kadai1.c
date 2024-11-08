@@ -2,22 +2,21 @@
 #include <ctype.h>
 
 int main() {
-    FILE *inputFile, *outputFile; // ファイルポインタの宣言
+    FILE *yomikomiFile, *kakidasiFile; // ファイルポインタの宣言
     char c; // 1文字を格納する変数
 
-    inputFile = fopen("data.txt", "r");
-    outputFile = fopen("count.txt", "w");
+    yomikomiFile = fopen("data.txt", "r");
+    kakidasiFile = fopen("count.txt", "w");
 
-    while ((c = fgetc(inputFile)) != EOF) {
+    while ((c = fgetc(yomikomiFile)) != EOF) {
         if (isalpha(c) || c == ' ' || c == '\n') {
-            fputc(c, outputFile);
-        } else {
-            fputc(' ', outputFile);
-        }
-    }
+            fputc(c, kakidasiFile);}
+       	else 
+	{
+            fputc(' ', kakidasiFile);}}
 
-    fclose(inputFile);
-    fclose(outputFile);
+    fclose(yomikomiFile);
+    fclose(kakidasiFile);
 
     return 0;
 }
