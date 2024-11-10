@@ -30,10 +30,6 @@ int main() {
 
     // ファイルを読み込み用に開く
     f = fopen("data.txt", "r");
-    if (f == NULL) {
-        printf("ファイルを開けませんでした。\n");
-        return 1;
-    }
 
     // ファイルから全テキストを読み込む
     while (fgets(kazu, sizeof(kazu), f) != NULL) {
@@ -54,29 +50,25 @@ int main() {
     sort_trigrams(trigrams, trigram_count);
 
     // 結果を表示（上位20件）
-    printf("頻度の高いバイグラム（2文字組）:\n");
+    printf("頻度の高い2文字組:\n");
     for (int i = 0; i < 20 && i < bigram_count; i++) {
         printf("%s: %d\n", bigrams[i].pair, bigrams[i].frequency);
     }
 
-    printf("\n頻度の高いトライグラム（3文字組）:\n");
+    printf("\n頻度の高い3文字組:\n");
     for (int i = 0; i < 20 && i < trigram_count; i++) {
         printf("%s: %d\n", trigrams[i].triplet, trigrams[i].frequency);
     }
 
     // 結果をファイルに書き込み
     fp = fopen("count.txt", "w");
-    if (fp == NULL) {
-        printf("ファイルを開けませんでした。\n");
-        return 1;
-    }
 
-    fprintf(fp, "頻度の高いバイグラム（2文字組）:\n");
+    fprintf(fp, "頻度の高い2文字組:\n");
     for (int i = 0; i < 20 && i < bigram_count; i++) {
         fprintf(fp, "%s: %d\n", bigrams[i].pair, bigrams[i].frequency);
     }
 
-    fprintf(fp, "\n頻度の高いトライグラム（3文字組）:\n");
+    fprintf(fp, "\n頻度の高い3文字組:\n");
     for (int i = 0; i < 20 && i < trigram_count; i++) {
         fprintf(fp, "%s: %d\n", trigrams[i].triplet, trigrams[i].frequency);
     }
