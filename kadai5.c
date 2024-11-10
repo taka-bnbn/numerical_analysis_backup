@@ -109,17 +109,23 @@ int main() {
         char next_char = '\0';
 
         // 次のトリプレットを探索
+        int found_next = 0;
         for (int i = 0; i < triplet_count; i++) {
             if (triplets[i].triplet[0] == prev1 && triplets[i].triplet[1] == prev2) {
+                // 次に続く文字を決定
                 next_char = triplets[i].triplet[2];
+                found_next = 1;
                 break;
             }
         }
 
-        if (next_char != '\0') {
+        if (found_next) {
             random_text[current_index++] = next_char;
         } else {
-            break;
+            // 次のトリプレットが見つからない場合はランダムに2文字のペアを選び直す
+            int new_start = rand() % triplet_count;
+            strcpy(random_text + current_index - 2, triplets[new_start].triplet);
+            current_index = 3;
         }
     }
 
