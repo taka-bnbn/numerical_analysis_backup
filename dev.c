@@ -5,12 +5,12 @@
 #include <ctype.h>
 
 #define MAX_TEXT_SIZE 100000
+#define GENERATED_SIZE 10000
 
 int main() {
     char text[MAX_TEXT_SIZE];
     FILE *fp;
     int total_chars = 0;
-    int M = 0;
 
     // ファイルを読み込み用に開く
     fp = fopen("data.txt", "r");
@@ -36,39 +36,23 @@ int main() {
     srand((unsigned int)time(NULL));
 
     // ランダムに文字列を生成
-    char generated[MAX_TEXT_SIZE];
+    char generated[GENERATED_SIZE + 1]; // 文字列を格納
     int generated_index = 0;
 
-    // 最初のペア（k 番目と k+1 番目）を選択
-    int k = rand() % (total_chars - 1); // k 番目の文字
-    generated[generated_index++] = text[k];
-    generated[generated_index++] = text[k + 1];
-
-    // 乱数により次の文字を選ぶ
-    for (int j = 0; generated_index < total_chars && generated_index < 100; j++) {  // 100文字まで生成
-        char A = generated[generated_index - 1]; // 最後に選んだ文字 A
-        int next_k = rand() % total_chars; // k′ 番目の文字
-
-        // k′ 番目の文字から A が現れる位置を探す
-        int found = 0;
-        for (int i = next_k; i < total_chars - 1; i++) {
-            if (text[i] == A) {
-                // A の後に続く文字を選ぶ
-                generated[generated_index++] = text[i + 1];
-                found = 1;
-                break;
-            }
-        }
-
-        // 次の文字が見つからなかった場合は終了
-        if (!found) {
-            break;
+    // 最初の三ッ組（k 番目, k+1 番目, k+2 番目）を選択
+    while (generated_index < GENERATED_SIZE) {
+        // 最初にランダムに三ッ組を選ぶ
+        int k = rand() % (total_chars - 2); // k 番目の文字
+        if (generated_index + 2 < GENERATED_SIZE) {
+            generated[generated_index++] = text[k];
+            generated[generated_index++] = text[k + 1];
+            generated[generated_index++] = text[k + 2];
         }
     }
 
     // 結果を表示
     generated[generated_index] = '\0';  // 終端文字を追加
-    printf("生成された文字列: \n%s\n", generated);
+    printf("生成された三ッ組の文字列: \n%s\n", generated);
 
     // 結果をcount.txtに出力
     fp = fopen("count.txt", "w");
