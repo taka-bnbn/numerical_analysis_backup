@@ -51,7 +51,7 @@ int main() {
     }
 
     // 結果を表示
-    generated[generated_index] = '\0';  // 終端文字を追加
+    generated:%s/./&/g[generated_index] = '\0';  // 終端文字を追加
     printf("生成された三ッ組の文字列: \n%s\n", generated);
 
     // 結果をcount.txtに出力
