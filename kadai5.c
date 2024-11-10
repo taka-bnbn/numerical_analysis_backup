@@ -1,45 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <ctype.h>
+#include <time.h>
 
-#define MAX_OUTPUT 100 // ランダムに生成する文字の最大個数
-#define MAX_PAIRS 10000
+#define MAX_TEXT 100000   // テキスト全体の最大長
+#define MAX_PAIRS 10000   // 2文字組の最大数
+#define MAX_TRIPLETS 10000 // 3文字組の最大数
+#define MAX_OUTPUT 100    // ランダムに生成する文字の最大個数
 
 typedef struct {
-    char pair[3];
-    int frequency;
+    char pair[3];   // 2文字のペア
+    int frequency;  // 出現頻度
 } PairFrequency;
 
+typedef struct {
+    char triplet[4]; // 3文字のトリプレット
+    int frequency;   // 出現頻度
+} TripletFrequency;
+
 int main() {
-    char text[10000];
+    char *text = (char *)malloc(MAX_TEXT * sizeof(char));
+    if (text == NULL) {
+        printf("メモリの確保に失敗しました。\n");
+        return 1;
+    }
+
     int total_chars = 0;
     FILE *fp;
     PairFrequency pairs[MAX_PAIRS];
-    int pair_count = 0;
+    TripletFrequency triplets[MAX_TRIPLETS];
+    int pair_count = 0, triplet_count = 0;
 
     // ファイルを読み込み用に開く
     fp = fopen("data.txt", "r");
     if (fp == NULL) {
         printf("ファイルを開けませんでした。\n");
+        free(text);
         return 1;
     }
 
-    // ファイル全体を読み込む
+    // ファイル全体を読み込み、アルファベットと空白のみを保持
     char ch;
     int index = 0;
-    while ((ch = fgetc(fp)) != EOF) {
-        if (isalpha(ch) || ch == ' ') { // アルファベットか空白のみ
+    while ((ch = fgetc(fp)) != EOF && index < MAX_TEXT - 1) {
+        if (isalpha(ch) || ch == ' ') {
             text[index++] = tolower(ch);
         }
     }
-    text[index] = '\0'; // 文字列の終端
+    text[index] = '\0';
     fclose(fp);
     total_chars = index;
 
-    // 連続する二文字のペアをカウント
+    // 2文字ペアの出現頻度をカウント
     for (int i = 0; i < total_chars - 1; i++) {
+        if (pair_count >= MAX_PAIRS) break;
         char pair[3] = {text[i], text[i + 1], '\0'};
         int found = 0;
         for (int j = 0; j < pair_count; j++) {
@@ -49,74 +64,81 @@ int main() {
                 break;
             }
         }
-        if (!found) {
+        if (!found && pair_count < MAX_PAIRS) {
             strcpy(pairs[pair_count].pair, pair);
             pairs[pair_count].frequency = 1;
             pair_count++;
         }
     }
 
-    // 累積分布を作成
-    int cumulative[MAX_PAIRS];
-    cumulative[0] = pairs[0].frequency;
-    for (int i = 1; i < pair_count; i++) {
-        cumulative[i] = cumulative[i - 1] + pairs[i].frequency;
+    // 3文字トリプレットの出現頻度をカウント
+    for (int i = 0; i < total_chars - 2; i++) {
+        if (triplet_count >= MAX_TRIPLETS) break;
+        char triplet[4] = {text[i], text[i + 1], text[i + 2], '\0'};
+        int found = 0;
+        for (int j = 0; j < triplet_count; j++) {
+            if (strcmp(triplets[j].triplet, triplet) == 0) {
+                triplets[j].frequency++;
+                found = 1;
+                break;
+            }
+        }
+        if (!found && triplet_count < MAX_TRIPLETS) {
+            strcpy(triplets[triplet_count].triplet, triplet);
+            triplets[triplet_count].frequency = 1;
+            triplet_count++;
+        }
     }
-
-    // 全ペアの出現数
-    int M = cumulative[pair_count - 1];
 
     // 乱数の初期化
     srand((unsigned int)time(NULL));
 
-    // ランダムに二文字ペアを選択
+    // ランダムに生成する文字列
     char random_text[MAX_OUTPUT + 1];
     int current_index = 0;
 
-    // 最初のペアをランダムに選ぶ
-    int k = rand() % M;
-    for (int i = 0; i < pair_count; i++) {
-        if (k < cumulative[i]) {
-            random_text[0] = pairs[i].pair[0];
-            random_text[1] = pairs[i].pair[1];
-            current_index = 2;
-            break;
-        }
-    }
+    // 初期トリプレットをランダムに選ぶ
+    int start = rand() % triplet_count;
+    strcpy(random_text, triplets[start].triplet);
+    current_index = 3;
 
     // 次の文字を繰り返し決定して文字列を生成
     while (current_index < MAX_OUTPUT) {
-        char last_char = random_text[current_index - 1];
+        char prev1 = random_text[current_index - 2];
+        char prev2 = random_text[current_index - 1];
+        char next_char = '\0';
 
-        // 次のペアを探す
-        int found_pair = 0;
-        for (int i = 0; i < pair_count; i++) {
-            if (pairs[i].pair[0] == last_char) {
-                random_text[current_index] = pairs[i].pair[1];
-                current_index++;
-                found_pair = 1;
+        // 次のトリプレットを探索
+        for (int i = 0; i < triplet_count; i++) {
+            if (triplets[i].triplet[0] == prev1 && triplets[i].triplet[1] == prev2) {
+                next_char = triplets[i].triplet[2];
                 break;
             }
         }
 
-        // ペアが見つからない場合は終了
-        if (!found_pair) {
+        if (next_char != '\0') {
+            random_text[current_index++] = next_char;
+        } else {
             break;
         }
     }
 
     random_text[current_index] = '\0'; // 終端文字
 
-    // 結果を count.txt に出力
+    // 結果をcount.txtに出力
     fp = fopen("count.txt", "w");
     if (fp == NULL) {
         printf("ファイルを開けませんでした。\n");
+        free(text);
         return 1;
     }
     fprintf(fp, "ランダムに生成された文字列:\n%s\n", random_text);
     fclose(fp);
 
     printf("結果が count.txt に出力されました。\n");
+
+    // メモリ解放
+    free(text);
 
     return 0;
 }
