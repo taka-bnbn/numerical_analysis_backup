@@ -4,7 +4,7 @@
 
 I don't know if it will work perfectly, and I won't take responsibility if it doesn't.
 
-data.txtの著作情報
+##data.txtの著作情報
 
 Title: Beauty and the Beast
 
